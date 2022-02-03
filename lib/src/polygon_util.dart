@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:maps_toolkit/src/spherical_util.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gm;
 
 import 'latlng.dart';
 import 'math_util.dart';
@@ -120,7 +121,7 @@ class PolygonUtil {
   /// otherwise. The polygon edge is implicitly closed - the closing segment
   /// between the first point and the last point is included.
   static bool isLocationOnEdge(
-          LatLng point, List<LatLng> polygon, bool geodesic,
+          LatLng point, List<gm.LatLng> polygon, bool geodesic,
           {num tolerance = DEFAULT_TOLERANCE}) =>
       _isLocationOnEdgeOrPath(point, polygon, true, geodesic, tolerance);
 
@@ -130,11 +131,11 @@ class PolygonUtil {
   /// The polyline is not closed -- the closing segment between the first point
   /// and the last point is not included.
   static bool isLocationOnPath(
-          LatLng point, List<LatLng> polyline, bool geodesic,
+          LatLng point, List<gm.LatLng> polyline, bool geodesic,
           {num tolerance = DEFAULT_TOLERANCE}) =>
       _isLocationOnEdgeOrPath(point, polyline, false, geodesic, tolerance);
 
-  static bool _isLocationOnEdgeOrPath(LatLng point, List<LatLng> poly,
+  static bool _isLocationOnEdgeOrPath(LatLng point, List<gm.LatLng> poly,
       bool closed, bool geodesic, num toleranceEarth) {
     final idx = locationIndexOnEdgeOrPath(
         point, poly, closed, geodesic, toleranceEarth);
@@ -156,7 +157,7 @@ class PolygonUtil {
   /// 1 if between poly[1] and poly[2],
   /// ...,
   /// poly.size()-2 if between poly[poly.size() - 2] and poly[poly.size() - 1]
-  static int locationIndexOnPath(LatLng point, List<LatLng> poly, bool geodesic,
+  static int locationIndexOnPath(LatLng point, List<gm.LatLng> poly, bool geodesic,
           {num tolerance = DEFAULT_TOLERANCE}) =>
       locationIndexOnEdgeOrPath(point, poly, false, geodesic, tolerance);
 
@@ -177,7 +178,7 @@ class PolygonUtil {
   /// 1 if between poly[1] and poly[2],
   /// ...,
   /// poly.size()-2 if between poly[poly.size() - 2] and poly[poly.size() - 1]
-  static int locationIndexOnEdgeOrPath(LatLng point, List<LatLng> poly,
+  static int locationIndexOnEdgeOrPath(LatLng point, List<gm.LatLng> poly,
       bool closed, bool geodesic, num toleranceEarth) {
     if (poly.isEmpty) {
       return -1;
